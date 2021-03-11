@@ -1,4 +1,6 @@
 import java.io.*; 
-public static void main(String[]args){
-  
+public class First{
+    public static void main(String[] args) {
+
+    }
 }
