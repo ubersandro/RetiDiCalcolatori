@@ -40,6 +40,7 @@ public class SocketTest {
             }
             System.out.println((System.currentTimeMillis()-startTime) / 1000 + " SECONDS TIME");
             is.close();
+            osw.close();
             filePw.close();/*chiudi il gas e vieni via --> flush*/
             s.close();
         }
