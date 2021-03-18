@@ -12,6 +12,7 @@ public class Test {
             modem=InetAddress.getAllByName("fritz.box");
         }catch(UnknownHostException e ){
             e.printStackTrace();
+            System.exit(1);
         }
         for(InetAddress addr : a) {
             System.out.println(addr);
