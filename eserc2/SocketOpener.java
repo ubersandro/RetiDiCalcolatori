@@ -1,2 +1,10 @@
-package eserc2;public class SocketOpener {
+package eserc2;
+
+import java.net.Socket;
+
+/**
+ * Il tempo di attesa del client per aprire socket potrebbe essere limitato --> SocketOpener
+ */
+public class SocketOpener extends Thread {
+
 }
