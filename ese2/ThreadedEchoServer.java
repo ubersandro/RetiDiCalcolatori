@@ -1,4 +1,4 @@
-package it.unical.dimes.reti.ese2;
+package ese2;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
