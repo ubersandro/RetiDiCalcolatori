@@ -1,4 +1,4 @@
-package it.unical.dimes.reti.ese1;
+package ese1;
 
 import java.io.IOException;
 import java.net.Socket;
