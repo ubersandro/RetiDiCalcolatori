@@ -14,13 +14,17 @@ public class EchoServerClientAd {
 			PrintWriter out = new PrintWriter(s.getOutputStream(), true);
 			BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			
-			new MyReader(in).start();
+			Thread t = new MyReader(in);
+			t.setDaemon(true);
+			t.start();
 			Scanner sc = new Scanner(System.in);
 			
 			while(true){				
 				String line = sc.nextLine();
-				if(line.equals("EXIT"))
+				if(line.equals("EXIT")){
+					out.println("BYE");
 					break;
+				}
 				out.println(line);
 			}
 
