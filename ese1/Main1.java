@@ -1,4 +1,4 @@
-package it.unical.dimes.reti.ese1;
+package ese1;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

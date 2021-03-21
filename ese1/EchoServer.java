@@ -22,9 +22,8 @@ public class EchoServer {
 				if (line == null)
 					done = true;
 				else {
+					if (line.trim().toUpperCase().equals("BYE")) done = true;
 					out.println("Echo: " + line.toUpperCase());
-					if (line.trim().toUpperCase().equals("BYE"))
-						done = true;
 				}
 			} // while
 			incoming.close();
