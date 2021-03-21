@@ -13,15 +13,14 @@ public class EchoServerClientAd {
 			Socket s = new Socket("localhost", 8189);
 			PrintWriter out = new PrintWriter(s.getOutputStream(), true);
 			BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			
+
 			Thread t = new MyReader(in);
-			t.setDaemon(true);
 			t.start();
 			Scanner sc = new Scanner(System.in);
-			
-			while(true){				
+
+			while (true) {
 				String line = sc.nextLine();
-				if(line.equals("EXIT")){
+				if (line.equals("EXIT")) {
 					out.println("BYE");
 					break;
 				}
@@ -33,28 +32,31 @@ public class EchoServerClientAd {
 		}
 	}
 }
+	class MyReader extends Thread {
+		BufferedReader in;
 
-class MyReader extends Thread {
-	BufferedReader in;
-
-	public MyReader(BufferedReader in) {
-		this.in = in;
-	}
-
-	@Override
-	public void run() {
-		boolean more = true;
-		try {
-			while (more) {
-				String line = in.readLine();
-				if (line == null)
-					more = false;
-				else
-					System.out.println(line);
-			}
-		} catch (IOException e) {
-			System.out.println("Error" + e);
+		public MyReader(BufferedReader in) {
+			this.in = in;
+			this.setDaemon(true);
 		}
+
+		@Override
+		public void run() {
+			boolean more = true;
+			try {
+				while (more) {
+					String line = in.readLine();
+					if (line == null)
+						more = false;
+					else
+						System.out.println(line);
+				}
+			} catch (IOException e) {
+				System.out.println("Error" + e);
+			}
+		}
+
 	}
 
-}
+
+
