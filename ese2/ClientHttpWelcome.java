@@ -1,6 +1,6 @@
 package ese2;
-import ese1.*;
 
+import ese1.MyReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
