@@ -1,4 +1,4 @@
-package it.unical.dimes.reti.ese4;
+package ese4;
 
 import java.io.BufferedReader;
 import java.io.IOException;
