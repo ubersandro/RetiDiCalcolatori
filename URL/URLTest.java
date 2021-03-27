@@ -26,7 +26,7 @@ public class URLTest {
             System.out.println(uc.getContentType());
             System.out.println(uc.getExpiration());
             System.out.println(uc.getLastModified());
-            File f = new File("out.html");
+            File f = new File("files//out.html");
             if(f.createNewFile()) System.out.println("New file created");;
             PrintWriter pw = new PrintWriter(new FileOutputStream(f));
             InputStream is2 = uc.getInputStream();
