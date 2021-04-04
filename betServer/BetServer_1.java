@@ -6,13 +6,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 public class BetServer_1 extends Thread{
     private boolean betAcceptable;
-    private int winningHorse;
+    private int winner;
     private Semaphore check;
     private Semaphore mutex;
     private long fine;
@@ -22,8 +23,8 @@ public class BetServer_1 extends Thread{
      *
      */
     private void extractWinner(){
-        winningHorse=1+(int)Math.random()*11;
-        System.out.println("VINCITORE ESTRATTO...");
+        winner =1+(int)(Math.random()*12);
+        System.out.println("VINCITORE ESTRATTO..." + winner);
     }
 
     private class Sender extends Thread{
@@ -31,11 +32,15 @@ public class BetServer_1 extends Thread{
             try{
                 mutex.acquire();
                 StringBuilder sb = new StringBuilder(300);
+                System.out.println(scommesse);
                 scommesse.forEach((IP, v) -> {
-                    if(v[0]==winningHorse){
-                        sb.append("<"+IP.getHostAddress()+">"+" <"+ v[2]*12+">\n");
+                    if(v[0]== winner){
+                        System.out.println(IP.getHostName());
+                        System.out.println(Arrays.toString(v));
+                        sb.append("<"+IP.getHostName()+">"+" <"+ v[1]*12+">\n");
                     }
                 });
+
                 System.out.println();
                 System.out.println("RISULTATI");
                 System.out.println(sb);
@@ -43,10 +48,12 @@ public class BetServer_1 extends Thread{
                 mutex.release();
                 byte [] msg = sb.toString().getBytes(StandardCharsets.UTF_8);
                 DatagramPacket dp = new DatagramPacket(msg, msg.length, InetAddress.getByName(ServerUtils.MULTICAST_ADDRESS),ServerUtils.MULTICAST_PORT);
-                MulticastSocket mcs = new MulticastSocket(ServerUtils.MULTICAST_PORT);
+                MulticastSocket mcs = new MulticastSocket();
                 int i=5;
                 while(i>0){
                     mcs.send(dp);
+                    System.out.println(new String(dp.getData()));
+                    System.out.println("INVIO "+i);
                     i--;
                 }
                 mcs.close();
@@ -181,10 +188,10 @@ public class BetServer_1 extends Thread{
         }
         this.extractWinner();
 
-        try{
+        /*try{
             Thread.sleep(10000);
         }catch (InterruptedException ex){}
-
+*/
         Thread sender = new Sender();
         sender.start();
 
@@ -204,7 +211,7 @@ public class BetServer_1 extends Thread{
         String tmp = bet.substring(bet.indexOf(' '));
         int money = Integer.parseInt(tmp.substring(tmp.indexOf('<')+1,tmp.indexOf('>')));
         System.out.println("HORSE "+horse+ " MONEY "+money);*/
-        new BetServer_1(System.currentTimeMillis()+15000).start();
+        new BetServer_1(System.currentTimeMillis()+10000).start();
     }
 
 }
