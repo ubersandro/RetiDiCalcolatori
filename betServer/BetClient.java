@@ -29,19 +29,15 @@ public class BetClient extends Thread{
             System.out.println(this.getId()+" HA SCOMMESSO <"+horse+">"+" <"+bet+">");
             pw.close();
             s.close();
-            MulticastSocket mcs = new MulticastSocket();
-
+            MulticastSocket mcs = new MulticastSocket(ServerUtils.MULTICAST_PORT);
             mcs.joinGroup(InetAddress.getByName(group));
             int i = 2;
             byte [] buffer = new byte[256];
             DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-            while(i-->=0){
-                mcs.receive(dp);
-                String st = new String(dp.getData());
-                System.out.println(st.substring(0,st.indexOf('\0'))); //--> attenzione
-            }
+            mcs.receive(dp);
+            String st = new String(dp.getData());
+            System.out.println(st.substring(0,st.indexOf('\0'))); //--> attenzione
             mcs.close();
-
         }catch(IOException ioex){
             ioex.printStackTrace();
         }
@@ -50,6 +46,5 @@ public class BetClient extends Thread{
     public static void main(String[] args) {
         int i = 10;
         while(i-->=0) new BetClient().start();
-
     }
 }

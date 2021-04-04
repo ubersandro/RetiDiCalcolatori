@@ -17,7 +17,7 @@ public class BetServer_1 extends Thread{
     private Semaphore check;
     private Semaphore mutex;
     private long fine;
-    private Map<InetAddress, int[]> scommesse; /*< IP , [cavallo, puntata] >*/
+    private Map<String, int[]> scommesse; /*< IP , [cavallo, puntata] >*/
     /**
      * Il thread si occupa dell'invio dei risultati ai Client connessi. L'invio procede con il Multicast UDP.
      *
@@ -32,12 +32,10 @@ public class BetServer_1 extends Thread{
             try{
                 mutex.acquire();
                 StringBuilder sb = new StringBuilder(300);
-                System.out.println(scommesse);
                 scommesse.forEach((IP, v) -> {
                     if(v[0]== winner){
-                        System.out.println(IP.getHostName());
                         System.out.println(Arrays.toString(v));
-                        sb.append("<"+IP.getHostName()+">"+" <"+ v[1]*12+">\n");
+                        sb.append("<"+IP+">"+" <"+ v[1]*12+">\n");
                     }
                 });
 
@@ -48,12 +46,10 @@ public class BetServer_1 extends Thread{
                 mutex.release();
                 byte [] msg = sb.toString().getBytes(StandardCharsets.UTF_8);
                 DatagramPacket dp = new DatagramPacket(msg, msg.length, InetAddress.getByName(ServerUtils.MULTICAST_ADDRESS),ServerUtils.MULTICAST_PORT);
-                MulticastSocket mcs = new MulticastSocket();
+                MulticastSocket mcs = new MulticastSocket(ServerUtils.MULTICAST_PORT);
                 int i=5;
                 while(i>0){
                     mcs.send(dp);
-                    System.out.println(new String(dp.getData()));
-                    System.out.println("INVIO "+i);
                     i--;
                 }
                 mcs.close();
@@ -111,7 +107,7 @@ public class BetServer_1 extends Thread{
                             int horse = Integer.parseInt(bet.substring(bet.indexOf('<') + 1, bet.indexOf('>')));
                             String tmp = bet.substring(bet.indexOf(' '));
                             int money = Integer.parseInt(tmp.substring(tmp.indexOf('<') + 1, tmp.indexOf('>')));
-                            scommesse.put(handle.getInetAddress(), new int[]{horse, money});
+                            scommesse.put(handle.getInetAddress().toString()+":"+handle.getPort(), new int[]{horse, money});
                             System.out.format("Scommessa ricevuta da "+handle.getRemoteSocketAddress()+" VALORE: "+money+" CAVALLO: "+horse+'\n');
                             mutex.release();
                         } else {
